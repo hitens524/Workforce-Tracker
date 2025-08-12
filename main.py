@@ -7,7 +7,7 @@ from tkinter import ttk
 con = mydb.connect(
     host='localhost',
     user='root',
-    password='2004#appu',
+    password='root',
     database='mini_proj_db',
     autocommit=True
 )
@@ -18,7 +18,6 @@ else:
     print('Connection Unsuccessful!')
 
 cur = con.cursor()
-
 
 def login_window():
     def cred_check():
