@@ -7,7 +7,7 @@ from tkinter import ttk
 con = mydb.connect(
     host='localhost',
     user='root',
-    password='root',
+    password='2004#appu',
     database='mini_proj_db',
     autocommit=True
 )
@@ -1284,15 +1284,6 @@ def working_interface():
         pady=10
     )
 
-    heading2 = Label(
-        master=frame1,
-        text='Jayantilal Ratilal & Co.',
-        font=('Times', 20, 'bold', 'underline'),
-        background='pink',
-        padx=10,
-        pady=10
-    )
-
     label_empno = Label(
         master=label_frame1,
         text='Employee ID',
@@ -1553,7 +1544,6 @@ def working_interface():
     label_output.pack(padx=10, pady=10)
 
     heading1.pack()
-    heading2.pack()
 
     label_empno.grid(row=0, column=0, padx=10, pady=10, sticky='w')
     entry_empno.grid(row=0, column=1, padx=10, pady=10, sticky='w')
