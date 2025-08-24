@@ -1,8 +1,7 @@
-
 import mysql.connector as mydb
-
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 
 con = mydb.connect(
     host='localhost',
@@ -170,92 +169,93 @@ def working_interface():
             label_output.configure(text=output_msg)
 
     def add_details():
-        validity = 0
-        validity1 = 0
+        if messagebox.askokcancel("Confirm Add", "Are you sure you want to add this employee?"):
+            validity = 0
+            validity1 = 0
 
-        a = entry_empno.get()
-        b = entry_empname.get().strip().upper()
-        c = entry_job.get().strip().upper()
-        d = entry_hiredate.get()
-        e = entry_sal.get()
-        f = entry_deptno.get()
-        g = b.replace(" ", "").lower()[0:3]+a+'@gmail.com'
-        h = entry_phone.get()
+            a = entry_empno.get()
+            b = entry_empname.get().strip().upper()
+            c = entry_job.get().strip().upper()
+            d = entry_hiredate.get()
+            e = entry_sal.get()
+            f = entry_deptno.get()
+            g = b.replace(" ", "").lower()[0:3]+a+'@gmail.com'
+            h = entry_phone.get()
 
-        for i in range(1):
+            for i in range(1):
 
-            if a == '' or b == '' or c == '' or d == '' or e == '' or f == '' or h == '':
-                output_msg = "No Entry can be left Empty except MAIL ID"
-                label_output.configure(text=output_msg)
-                validity += 1
-                break
-
-            else:
-
-                if len(str(a)) != 4 and str(a).isdigit != True:
-                    output_msg = "Wrong Entry Made for Employee ID"
+                if a == '' or b == '' or c == '' or d == '' or e == '' or f == '' or h == '':
+                    output_msg = "No Entry can be left Empty except MAIL ID"
                     label_output.configure(text=output_msg)
                     validity += 1
+                    break
 
-                elif b.replace(" ", "").isalpha() != True:
-                    output_msg = "Wrong Entry Made for Employee Name"
-                    label_output.configure(text=output_msg)
-                    validity += 1
-
-                elif c.isalpha() != True:
-                    output_msg = "Wrong Entry Made for Employee Job"
-                    label_output.configure(text=output_msg)
-                    validity += 1
-
-                elif d.replace('-', '').isdigit() != True:
-                    output_msg = "Wrong Entry Made for Hiredate, Format : [YYYY-MM-DD]"
-                    label_output.configure(text=output_msg)
-                    validity += 1
-
-                elif str(e).count('.') != 0 or str(e).count('.') != 1 and str(e).replace('.', '').isdigit() != True:
-                    output_msg = "Wrong Entry Made for Hiredate, Format : [YYYY-MM-DD]"
-                    label_output.configure(text=output_msg)
-                    validity += 1
-
-                elif len(str(f)) != 2 and str(f).isdigit != True:
-                    output_msg = "Wrong Entry Made for Department No."
-                    label_output.configure(text=output_msg)
-                    validity += 1
-
-                elif len(h) != 10 and h.isdigit != True:
-                    output_msg = "Wrong Entry Made for Phone No."
-                    label_output.configure(text=output_msg)
-                    validity += 1
-
-        validity2 = 0
-        if validity == 0:
-
-            s2 = 'SELECT * FROM employee;'
-            cur.execute(s2)
-            data = cur.fetchall()
-            for record in data:
-                if int(a) == record[0]:
-                    validity1 += 1
-            for record1 in data:
-                if h == record1[7]:
-                    validity2 += 1
-
-            if validity1 == 0:
-                if validity2 == 0:
-                    s1 = 'INSERT INTO employee\
-                        VALUES(%s, %s, %s, %s, %s, %s, %s, %s);'
-                    val = [a, b, c, d, e, f, g, h]
-
-                    cur.execute(s1, val)
-
-                    output_msg = f'EMPLOYEE - ID : {a}, Employee : {b}, Job : {c}, Hiredate : {d}, Salary : {e}, Department : {f}, Phone No. : {h} - ADDED SUCCESSFULLY\n New Mail ID created : {g}'
-                    label_output.configure(text=output_msg)
                 else:
-                    output_msg = f'Phone No. already Exists'
+
+                    if len(str(a)) != 4 and str(a).isdigit() != True:
+                        output_msg = "Wrong Entry Made for Employee ID"
+                        label_output.configure(text=output_msg)
+                        validity += 1
+
+                    elif b.replace(" ", "").isalpha() != True:
+                        output_msg = "Wrong Entry Made for Employee Name"
+                        label_output.configure(text=output_msg)
+                        validity += 1
+
+                    elif c.replace(" ", "").isalpha() != True:
+                        output_msg = "Wrong Entry Made for Employee Job"
+                        label_output.configure(text=output_msg)
+                        validity += 1
+
+                    elif d.replace('-', '').isdigit() != True:
+                        output_msg = "Wrong Entry Made for Hiredate, Format : [YYYY-MM-DD]"
+                        label_output.configure(text=output_msg)
+                        validity += 1
+
+                    elif str(e).count('.') != 0 or str(e).count('.') != 1 and str(e).replace('.', '').isdigit() != True:
+                        output_msg = "Wrong Entry Made for Hiredate, Format : [YYYY-MM-DD]"
+                        label_output.configure(text=output_msg)
+                        validity += 1
+
+                    elif len(str(f)) != 2 and str(f).isdigit() != True:
+                        output_msg = "Wrong Entry Made for Department No."
+                        label_output.configure(text=output_msg)
+                        validity += 1
+
+                    elif len(h) != 10 and h.isdigit() != True:
+                        output_msg = "Wrong Entry Made for Phone No."
+                        label_output.configure(text=output_msg)
+                        validity += 1
+
+            validity2 = 0
+            if validity == 0:
+
+                s2 = 'SELECT * FROM employee;'
+                cur.execute(s2)
+                data = cur.fetchall()
+                for record in data:
+                    if int(a) == record[0]:
+                        validity1 += 1
+                for record1 in data:
+                    if h == record1[7]:
+                        validity2 += 1
+
+                if validity1 == 0:
+                    if validity2 == 0:
+                        s1 = 'INSERT INTO employee\
+                            VALUES(%s, %s, %s, %s, %s, %s, %s, %s);'
+                        val = [a, b, c, d, e, f, g, h]
+
+                        cur.execute(s1, val)
+
+                        output_msg = f'EMPLOYEE - ID : {a}, Employee : {b}, Job : {c}, Hiredate : {d}, Salary : {e}, Department : {f}, Phone No. : {h} - ADDED SUCCESSFULLY\n New Mail ID created : {g}'
+                        label_output.configure(text=output_msg)
+                    else:
+                        output_msg = f'Phone No. already Exists'
+                        label_output.configure(text=output_msg)
+                else:
+                    output_msg = f'Employee ID already Exists'
                     label_output.configure(text=output_msg)
-            else:
-                output_msg = f'Employee ID already Exists'
-                label_output.configure(text=output_msg)
 
     def clear_space():
 
@@ -267,77 +267,77 @@ def working_interface():
         label_output.configure(text=output_msg)
 
     def change_details():
+        if messagebox.askokcancel("Confirm Change", "Are you sure you want to change employee details?"):
+            inp = entry_empno.get()
 
-        inp = entry_empno.get()
+            info1 = entry_job.get().strip().upper()
+            info2 = entry_sal.get()
+            info3 = entry_deptno.get()
 
-        info1 = entry_job.get().strip().upper()
-        info2 = entry_sal.get()
-        info3 = entry_deptno.get()
-
-        validity = 0
-        s1 = 'SELECT * FROM employee;'
-        cur.execute(s1)
-
-        data = cur.fetchall()
-
-        if inp == '':
-            output_msg = "Enter Employee ID to be Changed"
-            label_output.configure(text=output_msg)
-        else:
-            for record in data:
-                if int(inp) == record[0]:
-                    previousjob = record[2]
-                    if info1 != '':
-                        s2 = 'UPDATE employee SET job=%s WHERE empno=%s ;'
-                        val = [info1, inp]
-                        cur.execute(s2, val)
-                        validity += 1
-                        """if previousjob != info1:
-                            s3 = 'UPDATE employee SET mail=%s WHERE empno=%s ;'
-                            new_mail = record[1].replace(" ", "").lower(
-                            )[0:3]+input+info1.lower()[0:3]+'@gmail.com'
-                            val = [new_mail, inp]
-                            cur.execute(s3, val)"""
-
-                else:
-                    output_msg = "Employee ID not found"
-                    label_output.configure(text=output_msg)
-
-            for record in data:
-                if int(inp) == record[0]:
-                    if info2 != '':
-                        s2 = 'UPDATE employee SET sal=%s WHERE empno=%s ;'
-                        val = [info2, inp]
-                        cur.execute(s2, val)
-                        validity += 1
-
-            for record in data:
-                if int(inp) == record[0]:
-                    if info3.isdigit() != '':
-                        s2 = 'UPDATE employee SET deptno=%s WHERE empno=%s ;'
-                        val = [info3, inp]
-                        cur.execute(s2, val)
-                        validity += 1
-                    else:
-                        output_msg = "Wrong Entry for Department"
-                        label_output.configure(text=output_msg)
-
-            if validity > 0:
-                output_msg = "Employee Details Successfully Changed"
-                label_output.configure(text=output_msg)
-
-            for i in treeview_button.get_children():
-                treeview_button.delete(i)
-
-            s1 = 'SELECT * FROM employee WHERE empno = %s;'
-            val = [inp]
-
-            cur.execute(s1, val)
+            validity = 0
+            s1 = 'SELECT * FROM employee;'
+            cur.execute(s1)
 
             data = cur.fetchall()
 
-            for record in data:
-                treeview_button.insert(parent='', index='end', values=record)
+            if inp == '':
+                output_msg = "Enter Employee ID to be Changed"
+                label_output.configure(text=output_msg)
+            else:
+                for record in data:
+                    if int(inp) == record[0]:
+                        previousjob = record[2]
+                        if info1 != '':
+                            s2 = 'UPDATE employee SET job=%s WHERE empno=%s ;'
+                            val = [info1, inp]
+                            cur.execute(s2, val)
+                            validity += 1
+                            """if previousjob != info1:
+                                s3 = 'UPDATE employee SET mail=%s WHERE empno=%s ;'
+                                new_mail = record[1].replace(" ", "").lower(
+                                )[0:3]+input+info1.lower()[0:3]+'@gmail.com'
+                                val = [new_mail, inp]
+                                cur.execute(s3, val)"""
+
+                    else:
+                        output_msg = "Employee ID not found"
+                        label_output.configure(text=output_msg)
+
+                for record in data:
+                    if int(inp) == record[0]:
+                        if info2 != '':
+                            s2 = 'UPDATE employee SET sal=%s WHERE empno=%s ;'
+                            val = [info2, inp]
+                            cur.execute(s2, val)
+                            validity += 1
+
+                for record in data:
+                    if int(inp) == record[0]:
+                        if info3.isdigit() != '':
+                            s2 = 'UPDATE employee SET deptno=%s WHERE empno=%s ;'
+                            val = [info3, inp]
+                            cur.execute(s2, val)
+                            validity += 1
+                        else:
+                            output_msg = "Wrong Entry for Department"
+                            label_output.configure(text=output_msg)
+
+                if validity > 0:
+                    output_msg = "Employee Details Successfully Changed"
+                    label_output.configure(text=output_msg)
+
+                for i in treeview_button.get_children():
+                    treeview_button.delete(i)
+
+                s1 = 'SELECT * FROM employee WHERE empno = %s;'
+                val = [inp]
+
+                cur.execute(s1, val)
+
+                data = cur.fetchall()
+
+                for record in data:
+                    treeview_button.insert(parent='', index='end', values=record)
 
     def search_empno():
 
@@ -730,7 +730,7 @@ def working_interface():
                     if validity != 0:
                         print()
                     else:
-                        output_msg = f'NO Details of Phone No. Search for "{inp}" Found'
+                        output_msg = f'NO Details of Employee Phone Search for "{inp}" Found'
                         label_output.configure(text=output_msg)
 
                 else:
@@ -791,168 +791,18 @@ def working_interface():
                 label_output.configure(text=output_msg)
 
     def delete_empno():
+        if messagebox.askokcancel("Confirm Delete", "Are you sure you want to delete this employee by ID?"):
+            for i in treeview_button.get_children():
+                treeview_button.delete(i)
 
-        for i in treeview_button.get_children():
-            treeview_button.delete(i)
+            inp = entry_empno.get()
 
-        inp = entry_empno.get()
-
-        if inp == "":
-            output_msg = "EMPTY ENTRY"
-            label_output.configure(text=output_msg)
-
-        elif len(inp) == 4 and inp.isdigit() == True:
-
-            s2 = 'SELECT * FROM employee;'
-            cur.execute(s2)
-            data1 = cur.fetchall()
-            validity1 = 0
-            for record in data1:
-                validity1 += 1
-
-            if validity1 != 0:
-                s1 = 'SELECT * FROM employee WHERE empno = %s;'
-                val = [inp]
-                cur.execute(s1, val)
-                data = cur.fetchall()
-                validity = 0
-                for record in data:
-                    validity += 1
-
-                if validity != 0:
-                    s2 = 'DELETE FROM employee WHERE empno = %s;'
-
-                    cur.execute(s2, val)
-
-                    output_msg = f'EMPLOYEE ID : {inp}, DELETED SUCCESSFULLY'
-
-                    label_output.configure(text=output_msg)
-                else:
-                    output_msg = f'NO Details of Employee ID Search for "{inp}" Found'
-
-                    label_output.configure(text=output_msg)
-            else:
-                output_msg = f'EMPTY DATABASE : NOTHING TO BE DELETED'
-
+            if inp == "":
+                output_msg = "EMPTY ENTRY"
                 label_output.configure(text=output_msg)
 
-        else:
-            output_msg = "INVALID INPUT"
-            label_output.configure(text=output_msg)
+            elif len(inp) == 4 and inp.isdigit() == True:
 
-    def delete_empname():
-
-        for i in treeview_button.get_children():
-            treeview_button.delete(i)
-
-        inp = entry_empname.get()
-
-        if inp == "":
-            output_msg = "EMPTY ENTRY"
-            label_output.configure(text=output_msg)
-
-        elif inp.replace(" ", '').isalpha() != True:
-            output_msg = "INVALID NAME ENTERED"
-            label_output.configure(text=output_msg)
-
-        else:
-            s2 = 'SELECT * FROM employee;'
-            cur.execute(s2)
-            data1 = cur.fetchall()
-            validity1 = 0
-            for record in data1:
-                validity1 += 1
-
-            if validity1 != 0:
-                s1 = 'SELECT * FROM employee WHERE empname LIKE %s;'
-                val = [inp+'%']
-                cur.execute(s1, val)
-                data = cur.fetchall()
-                validity = 0
-                for record in data:
-                    validity += 1
-
-                if validity != 0:
-                    s1 = 'DELETE FROM employee WHERE empname LIKE %s;'
-                    val = [inp+'%']
-
-                    cur.execute(s1, val)
-
-                    output_msg = f'EMPLOYEE NAME : {inp}, DELETED SUCCESSFULLY'
-                    label_output.configure(text=output_msg)
-                else:
-                    output_msg = f'NO Details of Employee Name Search for "{inp}" Found'
-                    label_output.configure(text=output_msg)
-            else:
-                output_msg = f'EMPTY DATABASE : NOTHING TO BE DELETED'
-                label_output.configure(text=output_msg)
-
-    def delete_job():
-
-        for i in treeview_button.get_children():
-            treeview_button.delete(i)
-
-        inp = entry_job.get()
-
-        if inp == "":
-            output_msg = "EMPTY ENTRY"
-            label_output.configure(text=output_msg)
-
-        elif inp.isalpha() != True:
-            output_msg = "INVALID JOB ENTERED"
-            label_output.configure(text=output_msg)
-
-        else:
-            s2 = 'SELECT * FROM employee;'
-            cur.execute(s2)
-            data1 = cur.fetchall()
-            validity1 = 0
-            for record in data1:
-                validity1 += 1
-
-            if validity1 != 0:
-                s1 = 'SELECT * FROM employee WHERE job LIKE %s;'
-                val = [inp+'%']
-                cur.execute(s1, val)
-                data = cur.fetchall()
-                validity = 0
-                for record in data:
-                    validity += 1
-
-                if validity != 0:
-                    s1 = 'DELETE FROM employee WHERE job LIKE %s;'
-                    val = [inp+'%']
-
-                    cur.execute(s1, val)
-
-                    output_msg = f'EMPLOYEE JOB : {inp}, DELETED SUCCESSFULLY'
-                    label_output.configure(text=output_msg)
-                else:
-                    output_msg = f'NO Details of Employee Job Search for "{inp}" Found'
-                    label_output.configure(text=output_msg)
-            else:
-                output_msg = f'EMPTY DATABASE : NOTHING TO BE DELETED'
-                label_output.configure(text=output_msg)
-
-    def delete_hiredate():
-
-        for i in treeview_button.get_children():
-            treeview_button.delete(i)
-
-        inp = entry_hiredate.get()
-        inp1 = inp.replace('-', '')
-
-        if inp == "":
-            output_msg = "EMPTY ENTRY"
-            label_output.configure(text=output_msg)
-
-        elif inp1.isdigit() != True:
-            output_msg = "INVALID HIREDATE ENTERED"
-            label_output.configure(text=output_msg)
-
-        else:
-
-            if len(inp) <= 10 and len(inp) >= 4:
                 s2 = 'SELECT * FROM employee;'
                 cur.execute(s2)
                 data1 = cur.fetchall()
@@ -961,271 +811,421 @@ def working_interface():
                     validity1 += 1
 
                 if validity1 != 0:
-                    s1 = 'SELECT * FROM employee WHERE hiredate LIKE %s;'
-                    val = [inp+'%']
-
+                    s1 = 'SELECT * FROM employee WHERE empno = %s;'
+                    val = [inp]
                     cur.execute(s1, val)
-
                     data = cur.fetchall()
-
                     validity = 0
                     for record in data:
                         validity += 1
 
                     if validity != 0:
-                        s1 = 'DELETE FROM employee WHERE hiredate LIKE %s;'
+                        s2 = 'DELETE FROM employee WHERE empno = %s;'
+
+                        cur.execute(s2, val)
+
+                        output_msg = f'EMPLOYEE ID : {inp}, DELETED SUCCESSFULLY'
+
+                        label_output.configure(text=output_msg)
+                    else:
+                        output_msg = f'NO Details of Employee ID Search for "{inp}" Found'
+
+                        label_output.configure(text=output_msg)
+                else:
+                    output_msg = f'EMPTY DATABASE : NOTHING TO BE DELETED'
+
+                    label_output.configure(text=output_msg)
+
+            else:
+                output_msg = "INVALID INPUT"
+                label_output.configure(text=output_msg)
+
+    def delete_empname():
+        if messagebox.askokcancel("Confirm Delete", "Are you sure you want to delete this employee by Name?"):
+            for i in treeview_button.get_children():
+                treeview_button.delete(i)
+
+            inp = entry_empname.get()
+
+            if inp == "":
+                output_msg = "EMPTY ENTRY"
+                label_output.configure(text=output_msg)
+
+            elif inp.replace(" ", '').isalpha() != True:
+                output_msg = "INVALID NAME ENTERED"
+                label_output.configure(text=output_msg)
+
+            else:
+                s2 = 'SELECT * FROM employee;'
+                cur.execute(s2)
+                data1 = cur.fetchall()
+                validity1 = 0
+                for record in data1:
+                    validity1 += 1
+
+                if validity1 != 0:
+                    s1 = 'SELECT * FROM employee WHERE empname LIKE %s;'
+                    val = [inp+'%']
+                    cur.execute(s1, val)
+                    data = cur.fetchall()
+                    validity = 0
+                    for record in data:
+                        validity += 1
+
+                    if validity != 0:
+                        s1 = 'DELETE FROM employee WHERE empname LIKE %s;'
                         val = [inp+'%']
 
                         cur.execute(s1, val)
 
-                        output_msg = f'EMPLOYEE HIREDATE : {inp}, DELETED SUCCESSFULLY'
+                        output_msg = f'EMPLOYEE NAME : {inp}, DELETED SUCCESSFULLY'
                         label_output.configure(text=output_msg)
                     else:
-                        output_msg = f'NO Details of Employee Hiredate Search for "{inp}" Found'
+                        output_msg = f'NO Details of Employee Name Search for "{inp}" Found'
                         label_output.configure(text=output_msg)
                 else:
                     output_msg = f'EMPTY DATABASE : NOTHING TO BE DELETED'
                     label_output.configure(text=output_msg)
+
+    def delete_job():
+        if messagebox.askokcancel("Confirm Delete", "Are you sure you want to delete employees with this job?"):
+            for i in treeview_button.get_children():
+                treeview_button.delete(i)
+
+            inp = entry_job.get()
+
+            if inp == "":
+                output_msg = "EMPTY ENTRY"
+                label_output.configure(text=output_msg)
+
+            elif inp.isalpha() != True:
+                output_msg = "INVALID JOB ENTERED"
+                label_output.configure(text=output_msg)
+
             else:
+                s2 = 'SELECT * FROM employee;'
+                cur.execute(s2)
+                data1 = cur.fetchall()
+                validity1 = 0
+                for record in data1:
+                    validity1 += 1
+
+                if validity1 != 0:
+                    s1 = 'SELECT * FROM employee WHERE job LIKE %s;'
+                    val = [inp+'%']
+                    cur.execute(s1, val)
+                    data = cur.fetchall()
+                    validity = 0
+                    for record in data:
+                        validity += 1
+
+                    if validity != 0:
+                        s1 = 'DELETE FROM employee WHERE job LIKE %s;'
+                        val = [inp+'%']
+
+                        cur.execute(s1, val)
+
+                        output_msg = f'EMPLOYEE JOB : {inp}, DELETED SUCCESSFULLY'
+                        label_output.configure(text=output_msg)
+                    else:
+                        output_msg = f'NO Details of Employee Job Search for "{inp}" Found'
+                        label_output.configure(text=output_msg)
+                else:
+                    output_msg = f'EMPTY DATABASE : NOTHING TO BE DELETED'
+                    label_output.configure(text=output_msg)
+
+    def delete_hiredate():
+        if messagebox.askokcancel("Confirm Delete", "Are you sure you want to delete employees hired on this date?"):
+            for i in treeview_button.get_children():
+                treeview_button.delete(i)
+
+            inp = entry_hiredate.get()
+            inp1 = inp.replace('-', '')
+
+            if inp == "":
+                output_msg = "EMPTY ENTRY"
+                label_output.configure(text=output_msg)
+
+            elif inp1.isdigit() != True:
                 output_msg = "INVALID HIREDATE ENTERED"
                 label_output.configure(text=output_msg)
 
+            else:
+
+                if len(inp) <= 10 and len(inp) >= 4:
+                    s2 = 'SELECT * FROM employee;'
+                    cur.execute(s2)
+                    data1 = cur.fetchall()
+                    validity1 = 0
+                    for record in data1:
+                        validity1 += 1
+
+                    if validity1 != 0:
+                        s1 = 'SELECT * FROM employee WHERE hiredate LIKE %s;'
+                        val = [inp+'%']
+
+                        cur.execute(s1, val)
+
+                        data = cur.fetchall()
+
+                        validity = 0
+                        for record in data:
+                            validity += 1
+
+                        if validity != 0:
+                            s1 = 'DELETE FROM employee WHERE hiredate LIKE %s;'
+                            val = [inp+'%']
+
+                            cur.execute(s1, val)
+
+                            output_msg = f'EMPLOYEE HIREDATE : {inp}, DELETED SUCCESSFULLY'
+                            label_output.configure(text=output_msg)
+                        else:
+                            output_msg = f'NO Details of Employee Hiredate Search for "{inp}" Found'
+                            label_output.configure(text=output_msg)
+                    else:
+                        output_msg = f'EMPTY DATABASE : NOTHING TO BE DELETED'
+                        label_output.configure(text=output_msg)
+                else:
+                    output_msg = "INVALID HIREDATE ENTERED"
+                    label_output.configure(text=output_msg)
+
     def delete_sal():
+        if messagebox.askokcancel("Confirm Delete", "Are you sure you want to delete employees with this salary?"):
+            for i in treeview_button.get_children():
+                treeview_button.delete(i)
 
-        for i in treeview_button.get_children():
-            treeview_button.delete(i)
+            inp = entry_sal.get()
 
-        inp = entry_sal.get()
+            if inp == "":
+                output_msg = "EMPTY ENTRY"
+                label_output.configure(text=output_msg)
 
-        if inp == "":
-            output_msg = "EMPTY ENTRY"
-            label_output.configure(text=output_msg)
+            elif '.' in inp:
+                inp1 = inp.replace('.', '')
 
-        elif '.' in inp:
-            inp1 = inp.replace('.', '')
+                if inp1.isdigit() == True:
 
-            if inp1.isdigit() == True:
+                    s2 = 'SELECT * FROM employee;'
+                    cur.execute(s2)
+                    data1 = cur.fetchall()
+                    validity1 = 0
+                    for i in data1:
+                        validity1 += 1
 
-                s2 = 'SELECT * FROM employee;'
-                cur.execute(s2)
-                data1 = cur.fetchall()
-                validity1 = 0
-                for i in data1:
-                    validity1 += 1
+                    if validity1 != 0:
+                        s1 = 'SELECT * FROM employee WHERE sal = %s;'
+                        val = [inp]
+                        cur.execute(s1, val)
+                        data = cur.fetchall()
+                        validity = 0
+                        for record in data:
+                            validity += 1
 
-                if validity1 != 0:
-                    s1 = 'SELECT * FROM employee WHERE sal = %s;'
-                    val = [inp]
-                    cur.execute(s1, val)
-                    data = cur.fetchall()
-                    validity = 0
-                    for record in data:
-                        validity += 1
+                        if validity != 0:
+                            s2 = 'DELETE FROM employee WHERE sal = %s;'
 
-                    if validity != 0:
-                        s2 = 'DELETE FROM employee WHERE sal = %s;'
+                            cur.execute(s2, val)
 
-                        cur.execute(s2, val)
+                            output_msg = f'EMPLOYEE SALARY : {inp}, DELETED SUCCESSFULLY'
 
-                        output_msg = f'EMPLOYEE SALARY : {inp}, DELETED SUCCESSFULLY'
+                            label_output.configure(text=output_msg)
+                        else:
+                            output_msg = f'NO Details of Employee Salary Search for "{inp}" Found'
 
-                        label_output.configure(text=output_msg)
+                            label_output.configure(text=output_msg)
                     else:
-                        output_msg = f'NO Details of Employee Salary Search for "{inp}" Found'
+                        output_msg = f'EMPTY DATABASE : NOTHING TO BE DELETED'
 
                         label_output.configure(text=output_msg)
                 else:
-                    output_msg = f'EMPTY DATABASE : NOTHING TO BE DELETED'
-
+                    output_msg = "INVALID INPUT"
                     label_output.configure(text=output_msg)
             else:
-                output_msg = "INVALID INPUT"
-                label_output.configure(text=output_msg)
-        else:
-            if inp.isdigit() == True:
+                if inp.isdigit() == True:
 
-                s2 = 'SELECT * FROM employee;'
-                cur.execute(s2)
-                data1 = cur.fetchall()
-                validity1 = 0
-                for i in data1:
-                    validity1 += 1
+                    s2 = 'SELECT * FROM employee;'
+                    cur.execute(s2)
+                    data1 = cur.fetchall()
+                    validity1 = 0
+                    for i in data1:
+                        validity1 += 1
 
-                if validity1 != 0:
-                    s1 = 'SELECT * FROM employee WHERE sal = %s;'
-                    val = [inp]
-                    cur.execute(s1, val)
-                    data = cur.fetchall()
-                    validity = 0
-                    for record in data:
-                        validity += 1
+                    if validity1 != 0:
+                        s1 = 'SELECT * FROM employee WHERE sal = %s;'
+                        val = [inp]
+                        cur.execute(s1, val)
+                        data = cur.fetchall()
+                        validity = 0
+                        for record in data:
+                            validity += 1
 
-                    if validity != 0:
-                        s2 = 'DELETE FROM employee WHERE sal = %s;'
+                        if validity != 0:
+                            s2 = 'DELETE FROM employee WHERE sal = %s;'
 
-                        cur.execute(s2, val)
+                            cur.execute(s2, val)
 
-                        output_msg = f'EMPLOYEE SALARY : {inp}, DELETED SUCCESSFULLY'
+                            output_msg = f'EMPLOYEE SALARY : {inp}, DELETED SUCCESSFULLY'
 
-                        label_output.configure(text=output_msg)
+                            label_output.configure(text=output_msg)
+                        else:
+                            output_msg = f'NO Details of Employee Salary Search for "{inp}" Found'
+
+                            label_output.configure(text=output_msg)
                     else:
-                        output_msg = f'NO Details of Employee Salary Search for "{inp}" Found'
+                        output_msg = f'EMPTY DATABASE : NOTHING TO BE DELETED'
 
                         label_output.configure(text=output_msg)
                 else:
-                    output_msg = f'EMPTY DATABASE : NOTHING TO BE DELETED'
-
+                    output_msg = "INVALID INPUT"
                     label_output.configure(text=output_msg)
-            else:
-                output_msg = "INVALID INPUT"
-                label_output.configure(text=output_msg)
 
     def delete_deptno():
+        if messagebox.askokcancel("Confirm Delete", "Are you sure you want to delete employees in this department?"):
+            for i in treeview_button.get_children():
+                treeview_button.delete(i)
 
-        for i in treeview_button.get_children():
-            treeview_button.delete(i)
+            inp = entry_deptno.get()
 
-        inp = entry_deptno.get()
-
-        if inp == "":
-            output_msg = "EMPTY ENTRY"
-            label_output.configure(text=output_msg)
-
-        elif len(inp) == 2 and inp.isdigit() == True:
-
-            s2 = 'SELECT * FROM employee;'
-            cur.execute(s2)
-            data1 = cur.fetchall()
-            validity1 = 0
-            for record in data1:
-                validity1 += 1
-
-            if validity1 != 0:
-                s1 = 'SELECT * FROM employee WHERE deptno = %s;'
-                val = [inp]
-                cur.execute(s1, val)
-                data = cur.fetchall()
-                validity = 0
-                for record in data:
-                    validity += 1
-
-                if validity != 0:
-                    s2 = 'DELETE FROM employee WHERE deptno = %s;'
-
-                    cur.execute(s2, val)
-
-                    output_msg = f'DEPARTMENT NO. : {inp}, DELETED SUCCESSFULLY'
-
-                    label_output.configure(text=output_msg)
-                else:
-                    output_msg = f'NO Details of DEPARTMENT NO. Search for "{inp}" Found'
-
-                    label_output.configure(text=output_msg)
-            else:
-                output_msg = f'EMPTY DATABASE : NOTHING TO BE DELETED'
-
+            if inp == "":
+                output_msg = "EMPTY ENTRY"
                 label_output.configure(text=output_msg)
 
-        else:
-            output_msg = "INVALID INPUT"
-            label_output.configure(text=output_msg)
+            elif len(inp) == 2 and inp.isdigit() == True:
+
+                s2 = 'SELECT * FROM employee;'
+                cur.execute(s2)
+                data1 = cur.fetchall()
+                validity1 = 0
+                for record in data1:
+                    validity1 += 1
+
+                if validity1 != 0:
+                    s1 = 'SELECT * FROM employee WHERE deptno = %s;'
+                    val = [inp]
+                    cur.execute(s1, val)
+                    data = cur.fetchall()
+                    validity = 0
+                    for record in data:
+                        validity += 1
+
+                    if validity != 0:
+                        s2 = 'DELETE FROM employee WHERE deptno = %s;'
+
+                        cur.execute(s2, val)
+
+                        output_msg = f'DEPARTMENT NO. : {inp}, DELETED SUCCESSFULLY'
+
+                        label_output.configure(text=output_msg)
+                    else:
+                        output_msg = f'NO Details of DEPARTMENT NO. Search for "{inp}" Found'
+
+                        label_output.configure(text=output_msg)
+                else:
+                    output_msg = f'EMPTY DATABASE : NOTHING TO BE DELETED'
+
+                    label_output.configure(text=output_msg)
+
+            else:
+                output_msg = "INVALID INPUT"
+                label_output.configure(text=output_msg)
 
     def delete_mail():
+        if messagebox.askokcancel("Confirm Delete", "Are you sure you want to delete employees with this email?"):
+            for i in treeview_button.get_children():
+                treeview_button.delete(i)
 
-        for i in treeview_button.get_children():
-            treeview_button.delete(i)
+            inp = entry_mail.get()
 
-        inp = entry_mail.get()
-
-        if inp == "":
-            output_msg = "EMPTY ENTRY"
-            label_output.configure(text=output_msg)
-
-        elif '@gmail.com' not in inp:
-            output_msg = "INVALID MAIL ENTERED"
-            label_output.configure(text=output_msg)
-
-        else:
-            s2 = 'SELECT * FROM employee;'
-            cur.execute(s2)
-            data1 = cur.fetchall()
-            validity1 = 0
-            for i in data1:
-                validity1 += 1
-
-            if validity1 != 0:
-                s1 = 'SELECT * FROM employee WHERE mail LIKE %s;'
-                val = [inp+'%']
-                cur.execute(s1, val)
-                data = cur.fetchall()
-                validity = 0
-                for record in data:
-                    validity += 1
-
-                if validity != 0:
-                    s1 = 'DELETE FROM employee WHERE mail LIKE %s;'
-                    val = [inp+'%']
-
-                    cur.execute(s1, val)
-
-                    output_msg = f'EMPLOYEE MAIL : {inp}, DELETED SUCCESSFULLY'
-                    label_output.configure(text=output_msg)
-                else:
-                    output_msg = f'NO Details of Employee Mail Search for "{inp}" Found'
-                    label_output.configure(text=output_msg)
-            else:
-                output_msg = f'EMPTY DATABASE : NOTHING TO BE DELETED'
+            if inp == "":
+                output_msg = "EMPTY ENTRY"
                 label_output.configure(text=output_msg)
+
+            elif '@gmail.com' not in inp:
+                output_msg = "INVALID MAIL ENTERED"
+                label_output.configure(text=output_msg)
+
+            else:
+                s2 = 'SELECT * FROM employee;'
+                cur.execute(s2)
+                data1 = cur.fetchall()
+                validity1 = 0
+                for i in data1:
+                    validity1 += 1
+
+                if validity1 != 0:
+                    s1 = 'SELECT * FROM employee WHERE mail LIKE %s;'
+                    val = [inp+'%']
+                    cur.execute(s1, val)
+                    data = cur.fetchall()
+                    validity = 0
+                    for record in data:
+                        validity += 1
+
+                    if validity != 0:
+                        s1 = 'DELETE FROM employee WHERE mail LIKE %s;'
+                        val = [inp+'%']
+
+                        cur.execute(s1, val)
+
+                        output_msg = f'EMPLOYEE MAIL : {inp}, DELETED SUCCESSFULLY'
+                        label_output.configure(text=output_msg)
+                    else:
+                        output_msg = f'NO Details of Employee Mail Search for "{inp}" Found'
+                        label_output.configure(text=output_msg)
+                else:
+                    output_msg = f'EMPTY DATABASE : NOTHING TO BE DELETED'
+                    label_output.configure(text=output_msg)
 
     def delete_phone():
+        if messagebox.askokcancel("Confirm Delete", "Are you sure you want to delete employees with this phone number?"):
+            for i in treeview_button.get_children():
+                treeview_button.delete(i)
 
-        for i in treeview_button.get_children():
-            treeview_button.delete(i)
+            inp = entry_phone.get()
 
-        inp = entry_phone.get()
-
-        if inp == "":
-            output_msg = "EMPTY ENTRY"
-            label_output.configure(text=output_msg)
-
-        elif len(inp) == 10 and inp.isdigit() == True:
-
-            s2 = 'SELECT * FROM employee;'
-            cur.execute(s2)
-            data1 = cur.fetchall()
-            validity1 = 0
-            for record in data1:
-                validity1 += 1
-
-            if validity1 != 0:
-                s1 = 'SELECT * FROM employee WHERE phone = %s;'
-                val = [inp]
-                cur.execute(s1, val)
-                data = cur.fetchall()
-                validity = 0
-                for record in data:
-                    validity += 1
-
-                if validity != 0:
-                    s2 = 'DELETE FROM employee WHERE phone = %s;'
-
-                    cur.execute(s2, val)
-
-                    output_msg = f'EMPLOYEE PHONE No. : {inp}, DELETED SUCCESSFULLY'
-
-                    label_output.configure(text=output_msg)
-                else:
-                    output_msg = f'NO Details of Employee Phone Search for "{inp}" Found'
-
-                    label_output.configure(text=output_msg)
-            else:
-                output_msg = f'EMPTY DATABASE : NOTHING TO BE DELETED'
-
+            if inp == "":
+                output_msg = "EMPTY ENTRY"
                 label_output.configure(text=output_msg)
 
-        else:
-            output_msg = "INVALID INPUT"
-            label_output.configure(text=output_msg)
+            elif len(inp) == 10 and inp.isdigit() == True:
+
+                s2 = 'SELECT * FROM employee;'
+                cur.execute(s2)
+                data1 = cur.fetchall()
+                validity1 = 0
+                for record in data1:
+                    validity1 += 1
+
+                if validity1 != 0:
+                    s1 = 'SELECT * FROM employee WHERE phone = %s;'
+                    val = [inp]
+                    cur.execute(s1, val)
+                    data = cur.fetchall()
+                    validity = 0
+                    for record in data:
+                        validity += 1
+
+                    if validity != 0:
+                        s2 = 'DELETE FROM employee WHERE phone = %s;'
+
+                        cur.execute(s2, val)
+
+                        output_msg = f'EMPLOYEE PHONE No. : {inp}, DELETED SUCCESSFULLY'
+
+                        label_output.configure(text=output_msg)
+                    else:
+                        output_msg = f'NO Details of Employee Phone Search for "{inp}" Found'
+
+                        label_output.configure(text=output_msg)
+                else:
+                    output_msg = f'EMPTY DATABASE : NOTHING TO BE DELETED'
+
+                    label_output.configure(text=output_msg)
+
+            else:
+                output_msg = "INVALID INPUT"
+                label_output.configure(text=output_msg)
 
     main_window = Tk()
     main_window.geometry('1000x600')
@@ -1600,7 +1600,6 @@ def working_interface():
     button_logout.grid(row=3, column=4, padx=5, pady=5, rowspan=2, sticky='w')
 
     treeview_button.pack(fill='both', expand='yes', padx=10, pady=10)
-
 
 login_window()
 
